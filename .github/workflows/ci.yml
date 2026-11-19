@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - name: Build, tests, ArchUnit, coverage gate
+        run: mvn -B verify
+      - name: Deliverables check
+        # docs grow milestone by milestone; this step reports but does not block until M5
+        continue-on-error: true
+        run: bash scripts/check-deliverables.sh --ci

@@ -1,0 +1,22 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "App (in-memory)",
+      "request": "launch",
+      "mainClass": "kz.edu.tickets.App",
+      "console": "integratedTerminal",
+      "vmArgs": "-Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8"
+    },
+    {
+      "type": "java",
+      "name": "App (file storage)",
+      "request": "launch",
+      "mainClass": "kz.edu.tickets.App",
+      "args": "--storage=file",
+      "console": "integratedTerminal",
+      "vmArgs": "-Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8"
+    }
+  ]
+}
