@@ -1,16 +1,11 @@
-## Не өзгерді
+## What and why
+<!-- Link the issue: Closes #N -->
 
-<!-- Қысқаша сипаттама -->
+## Pattern(s) touched
+<!-- Which entry in docs/PATTERN_REGISTER.md does this change? -->
 
-Closes #
-
-## Қозғалған үлгі (pattern)
-
-- [ ] Жоқ
-- Үлгі: <!-- мысалы, Strategy (PricingStrategy) -->
-
-## Тексеру
-
-- [ ] `mvn verify` жергілікті жасыл
-- [ ] Жаңа/өзгерген кодқа тест жазылды
-- [ ] Қажет болса `docs/PATTERN_REGISTER.md` және ADR жаңартылды
+## Checklist
+- [ ] `mvn verify` passes locally
+- [ ] New behaviour has tests
+- [ ] PATTERN_REGISTER.md / ADR updated if design changed
+- [ ] A teammate (not the author) has reviewed

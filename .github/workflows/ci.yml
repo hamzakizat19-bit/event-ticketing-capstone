@@ -1,24 +1,26 @@
 name: CI
-
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # release tags are needed by check-deliverables.sh
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
           cache: maven
-      - name: Build, tests, ArchUnit, coverage gate
+      - name: Build, test, coverage gate
         run: mvn -B verify
-      - name: Deliverables check
-        # docs grow milestone by milestone; this step reports but does not block until M5
-        continue-on-error: true
-        run: bash scripts/check-deliverables.sh --ci
+      - name: Deliverables check (docs, pattern register, ADRs)
+        run: bash scripts/check-deliverables.sh
+        continue-on-error: ${{ github.event_name == 'pull_request' }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: target/site/jacoco

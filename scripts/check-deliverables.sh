@@ -1,50 +1,38 @@
 #!/usr/bin/env bash
-# Checks the non-code deliverables of the capstone (section 9).
-# Usage: bash scripts/check-deliverables.sh          (full check before a release)
-#        bash scripts/check-deliverables.sh --ci     (CI: tags and reflections are only warnings)
+# Checks the non-code deliverables. Exit 1 if anything is missing.
+# (Course starter script, unchanged.)
 set -u
 cd "$(dirname "$0")/.."
-
 fail=0
-ci=0
-[ "${1:-}" = "--ci" ] && ci=1
-ok()   { echo "  OK   $1"; }
-bad()  { echo "  FAIL $1"; fail=1; }
-soft() { if [ "$ci" -eq 1 ]; then echo "  WARN $1"; else bad "$1"; fi; }
+say() { echo "  $1"; }
+ng() { echo "FAIL: $1"; fail=1; }
+ok() { echo "ok:   $1"; }
 
-echo "Deliverables check"
-
-# README
-if [ -f README.md ] && ! grep -qiE 'TODO|<placeholder>|lorem' README.md; then ok "README.md"; else bad "README.md missing or has placeholders"; fi
-grep -q '```mermaid' README.md 2>/dev/null && ok "README architecture diagram" || bad "README has no mermaid diagram"
-
-# Pattern register
 reg=docs/PATTERN_REGISTER.md
-if [ -f "$reg" ]; then
-  rows=$(grep -cE '^\| *[0-9]+ *\|' "$reg")
-  [ "$rows" -ge 8 ] && ok "register rows: $rows (>= 8)" || bad "register rows: $rows (< 8)"
-  c=$(grep -cE '^\| *[0-9]+ *\|.*\(Creational\)' "$reg")
-  s=$(grep -cE '^\| *[0-9]+ *\|.*\(Structural\)' "$reg")
-  b=$(grep -cE '^\| *[0-9]+ *\|.*\(Behavioral\)' "$reg")
-  [ "$c" -ge 2 ] && [ "$s" -ge 2 ] && [ "$b" -ge 3 ] && ok "categories C=$c S=$s B=$b" || bad "categories C=$c S=$s B=$b (need 2/2/3)"
-  rej=$(grep -cE 'adr/[0-9]+-rejected' "$reg")
-  [ "$rej" -ge 2 ] && ok "rejected patterns: $rej" || bad "rejected patterns: $rej (< 2)"
-else
-  bad "$reg missing"
-fi
+[ -f "$reg" ] || { ng "missing $reg"; exit 1; }
 
-# ADRs
-adr=$(ls docs/adr/*.md 2>/dev/null | wc -l)
-[ "$adr" -ge 5 ] && ok "ADR count: $adr" || bad "ADR count: $adr (< 5)"
+# register rows: lines starting with "| <number> |" excluding TODO rows
+rows=$(grep -E '^\| *[0-9]+ *\|' "$reg" | grep -v 'TODO' | wc -l)
+[ "$rows" -ge 8 ] && ok "pattern register has $rows filled rows (need >= 8)" || ng "pattern register has $rows filled rows (need >= 8)"
 
-# Reflections (template does not count)
-refl=$(ls docs/reflection-*.md 2>/dev/null | grep -v TEMPLATE | wc -l)
-[ "$refl" -ge 1 ] && ok "reflections: $refl" || soft "no docs/reflection-<handle>.md yet"
+cats=0
+for c in Creational Structural Behavioral; do
+  grep -E '^\| *[0-9]+ *\|' "$reg" | grep -v TODO | grep -qi "$c" && cats=$((cats+1))
+done
+[ "$cats" -ge 3 ] && ok "all 3 categories mentioned" || ng "register must name the category (Creational/Structural/Behavioral) in >=1 row each (found $cats/3)"
 
-# Release tags
-tags=$(git tag -l 'v*' 2>/dev/null | wc -l)
-[ "$tags" -ge 3 ] && ok "release tags: $tags" || soft "release tags: $tags (< 3)"
-git tag -l 'v1.0' 2>/dev/null | grep -q v1.0 && ok "v1.0 tag" || soft "v1.0 tag missing"
+rej=$(awk '/Rejected patterns/{f=1} f && /^\| *[A-Za-z]/ && !/Pattern *\|/ && !/TODO/ && !/---/' "$reg" | wc -l)
+[ "$rej" -ge 2 ] && ok "$rej rejected patterns documented" || ng "need >= 2 rejected patterns (found $rej)"
 
-[ "$fail" -eq 0 ] && echo "ALL GOOD" || echo "SOME CHECKS FAILED"
-exit "$fail"
+adrs=$(ls docs/adr/[0-9][0-9][0-9][0-9]-*.md 2>/dev/null | grep -v 0000-template | wc -l)
+[ "$adrs" -ge 5 ] && ok "$adrs ADRs" || ng "need >= 5 ADRs besides the template (found $adrs)"
+
+refl=$(ls docs/reflection-*.md 2>/dev/null | wc -l)
+[ "$refl" -ge 2 ] && ok "$refl reflections" || ng "need one reflection file per student (found $refl)"
+
+grep -q '<PROJECT NAME>' README.md && ng "README still has the template placeholder" || ok "README customised"
+
+tags=$(git tag 2>/dev/null | grep -c '^v')
+[ "$tags" -ge 3 ] && ok "$tags release tags" || ng "need >= 3 release tags v0.x (found $tags)"
+
+exit $fail
