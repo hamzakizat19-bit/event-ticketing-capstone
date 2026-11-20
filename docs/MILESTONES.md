@@ -18,56 +18,56 @@ GitHub-та істелетіндер: private репо жасау, оқытуш�
 
 | Issue | Branch | Үлгі | Файлдар |
 |---|---|---|---|
-| Орындар картасы | `feature/14-seat-map` | Composite | `domain/venue/Seat*`, `SeatGroup`, `GroupKind`, `SeatStatus`, `SeatCategory` + тест |
-| Іс-шара, Repository (жад) | `feature/15-events-repo` | Repository | `domain/event`, `domain/repository`, `infra/persistence/InMemory*`, `EventService` |
-| Билеттер | `feature/16-ticket-factory` | Factory Method | `domain/ticket/*` + `TicketBridgeTest` (алғашқы нұсқа) |
-| Промокод | `feature/17-promo-decorator` | Decorator | `domain/pricing/Price*`, `*Discount`, `domain/promo` |
-| Хабарламалар | `feature/18-notifications` | Observer | `service/notify`, `infra/notify` |
-| Брондау + консоль | `feature/19-booking-console` | — | `BookingService` (hold/pay/cancel), `ConsoleUI`, `App` |
+| Орындар картасы | `feature/16-seat-map` | Composite | `domain/venue/Seat*`, `SeatGroup`, `GroupKind`, `SeatStatus`, `SeatCategory` + тест |
+| Іс-шара, Repository (жад) | `feature/17-events-repo` | Repository | `domain/event`, `domain/repository`, `infra/persistence/InMemory*`, `EventService` |
+| Билеттер | `feature/18-ticket-factory` | Factory Method | `domain/ticket/*` + `TicketBridgeTest` (алғашқы нұсқа) |
+| Промокод | `feature/19-promo-decorator` | Decorator | `domain/pricing/Price*`, `*Discount`, `domain/promo` |
+| Хабарламалар | `feature/20-notifications` | Observer | `service/notify`, `infra/notify` |
+| Брондау + консоль | `feature/21-booking-console` | — | `BookingService` (hold/pay/cancel), `ConsoleUI`, `App` |
 
 ## 7-апта: Үлгілер аудиті
 
 | Issue | Branch | Файлдар |
 |---|---|---|
-| Аудит | `docs/20-pattern-audit` | `docs/adr/0009-*.md`, `docs/PATTERN_REGISTER.md` |
+| Аудит | `docs/22-pattern-audit` | `docs/adr/0009-*.md`, `docs/PATTERN_REGISTER.md` |
 
 ## M3: Күрделі үлгілер (8–11 апта) → тег `v0.3`
 
 | Issue | Branch | Үлгі |
 |---|---|---|
-| Тарифтер | `feature/21-pricing-strategy` | Strategy (+ Decorator үйлесімі), ADR-0003 |
-| Брондау күйлері | `feature/22-booking-state` | State, ADR-0006 |
-| Алаң құрастырушы | `feature/23-venue-builder` | Builder, ADR-0002 |
-| Билет форматтары | `feature/24-ticket-bridge` | Bridge, ADR-0005 |
-| Кеңейту нүктесі | `test/25-extension-point` | `ExtensionPointTest` |
+| Тарифтер | `feature/23-pricing-strategy` | Strategy (+ Decorator үйлесімі), ADR-0003 |
+| Брондау күйлері | `feature/24-booking-state` | State, ADR-0006 |
+| Алаң құрастырушы | `feature/25-venue-builder` | Builder, ADR-0002 |
+| Билет форматтары | `feature/26-ticket-bridge` | Bridge, ADR-0005 |
+| Кеңейту нүктесі | `test/27-extension-point` | `ExtensionPointTest` |
 
 ## M4: Архитектура және сақтау (12–14 апта) → тег `v0.4`
 
 | Issue | Branch | Үлгі |
 |---|---|---|
-| Брондауды тексеру | `feature/26-validation-chain` | Chain of Responsibility, ADR-0007 |
-| Ұстап тұру / қайтару | `feature/27-hold-memento` | Memento, ADR-0004 |
-| Файлда сақтау | `feature/28-file-repository` | Repository (2-нұсқа), ADR-0008 |
-| Қамту ≥ 60% | `test/29-coverage` | JaCoCo шегі |
+| Брондауды тексеру | `feature/28-validation-chain` | Chain of Responsibility, ADR-0007 |
+| Ұстап тұру / қайтару | `feature/29-hold-memento` | Memento, ADR-0004 |
+| Файлда сақтау | `feature/30-file-repository` | Repository (2-нұсқа), ADR-0008 |
+| Қамту ≥ 60% | `test/31-coverage` | JaCoCo шегі |
 
 ## M5: Релиз (15 апта) → тег `v1.0`
 
 | Issue | Branch | Файлдар |
 |---|---|---|
-| Қабылданбаған үлгілер | `docs/30-rejected-patterns` | ADR-0010, 0011, 0012 |
-| Рефлексиялар | `docs/31-reflections` | `docs/reflection-<handle>.md` (әр студент **өзі** жазады) |
-| README, презентация | `docs/32-release` | `README.md`, `docs/PRESENTATION.md` |
+| Қабылданбаған үлгілер | `docs/32-rejected-patterns` | ADR-0010, 0011, 0012 |
+| Рефлексиялар | `docs/33-reflections` | `docs/reflection-<handle>.md` (әр студент **өзі** жазады) |
+| README, презентация | `docs/34-release` | `README.md`, `docs/PRESENTATION.md` |
 
 ## Командалар
 
 ```powershell
 git switch main; git pull
-git switch -c feature/14-seat-map
+git switch -c feature/16-seat-map
 # ... файлдарды қосу, шағын коммиттер ...
-git commit -m "feat: add Composite seat map (#14)"
+git commit -m "feat: add Composite seat map (#16)"
 mvn verify
-git push -u origin feature/14-seat-map
-# GitHub-та PR ашу: "Closes #14", екінші адам шолады
+git push -u origin feature/16-seat-map
+# GitHub-та PR ашу: "Closes #16", екінші адам шолады
 ```
 
 Релиз кезінде:
